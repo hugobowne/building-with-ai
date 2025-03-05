@@ -1,0 +1,13 @@
+llama-index
+openai
+gradio
+PyMuPDF
+datasette
+anthropic
+transformers  
+sentence-transformers 
+scikit-learn
+pandas
+numpy
+matplotlib
+ipykernel
