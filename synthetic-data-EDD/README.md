@@ -1,124 +1,131 @@
-# Synthetic Data Generation & Evaluation
+# Synthetic Data Generation & Evaluation for LLM Apps
 
-This directory contains scripts and data used for experimenting with synthetic data generation and evaluation viewer setup, mirroring parts of the main `eval` directory.
+This directory contains scripts and data for experimenting with synthetic data generation and evaluation-driven development (EDD) for Large Language Model (LLM) applications. It mirrors parts of the main `eval` directory but is focused on demonstrating a specific workflow.
 
-## Setup
+## The Evaluation-Driven Development (EDD) Flywheel
 
-1.  **Install Dependencies:**
+This setup demonstrates a practical EDD workflow, creating a continuous improvement cycle for LLM applications:
+
+1.  **Define Test Cases:** Start by defining representative user personas and scenarios (`definitions.py`) that capture expected usage patterns.
+2.  **Generate Synthetic Data:** Automatically create relevant test questions based on these definitions (`synthetic_data_generator.py`). This enables testing even without real user data.
+3.  **Generate Responses:** Run the synthetic questions through your LLM system (e.g., an initial RAG setup) to get baseline responses.
+4.  **Manual Labeling (Ground Truth):** Manually label a subset of responses (e.g., 20-100 examples) as "pass" or "fail" with reasons, using tools like `manual_evaluator.html`. This builds the ground truth needed for reliable evaluation.
+5.  **Iterate & Compare:** Improve your system (e.g., try new models like Gemini, refine prompts, enhance retrieval). Generate responses from the updated system using the same questions. Use viewers like `compare_viewer.html` to see side-by-side differences.
+6.  **Automated Evaluation (LLM-as-Judge):** Leverage the manually labeled data to configure an LLM to act as an automated judge (`simple_llm_judge.py`). This allows for consistent evaluation of large response sets.
+7.  **Analyze & Improve:** Use viewers like `evaluation_comparison.html` to analyze the automated evaluation results. Identify patterns (e.g., specific scenarios where one model fails) and use these insights to guide the next round of system improvements.
+
+This cycle (**Define -> Generate Data -> Generate Responses -> Label -> Evaluate -> Analyze -> Improve**) forms an EDD flywheel, driving continuous enhancement of your LLM application based on measurable quality signals.
+
+## Prerequisites & Setup
+
+Before running the lesson steps, ensure you have:
+
+*   Python 3.x installed.
+*   Access to an OpenAI API key.
+*   (Optional) Access to a Gemini API key if you plan to use `simple_llm_judge.py` with Gemini or adapt scripts for it.
+
+**Setup Steps:**
+
+1.  **Install Dependencies:** Open your terminal in the **project root directory** (the parent of `synthetic-data-EDD/`) and run:
     ```bash
-    pip install -r requirements.txt
+    pip install -r synthetic-data-EDD/requirements.txt
     ```
 2.  **Configure API Keys:**
-    *   Create a file named `.env` in the main project root directory (the parent directory of `synthetic-data-EDD/`).
-    *   Add your OpenAI API key to the `.env` file like this:
+    *   In the **project root directory** (one level above this `synthetic-data-EDD/` directory), create a file named `.env`.
+    *   Add your OpenAI API key to the `.env` file:
         ```
         OPENAI_API_KEY='your_api_key_here'
         ```
-    *   *(Optional)* If you intend to use Gemini via the `simple_llm_judge.py` script or adapt other scripts, you might also need to add `GEMINI_API_KEY='your_gemini_key_here'`.
+    *   *(Optional)* If needed, add your Gemini API key:
+        ```
+        GEMINI_API_KEY='your_gemini_key_here'
+        ```
+3.  **(For Viewers) Start a Simple HTTP Server:** The HTML viewers need to be served. Open a terminal **inside the `synthetic-data-EDD/` directory** and run:
+    ```bash
+    python -m http.server
+    ```
+    Keep this server running in the background. You can then access viewers at `http://localhost:8000/viewers/viewer_name.html`.
 
-## Contents
+## Lightning Lesson Steps
 
-*   `definitions.py`: Defines the user personas and scenarios as Python dictionaries (hardcoded based on original `../data/*.json` files). Can be run directly to save these definitions to `data/personas.json` and `data/scenarios.json`.
-*   `synthetic_data_generator.py`: Imports definitions from `definitions.py`, uses the OpenAI API to generate synthetic questions based on these, and saves the output to `data/questions.json`. Requires `OPENAI_API_KEY` in the `.env` file.
-*   `simple_llm_judge.py`: (Copied from `../`) Script that uses an LLM (like OpenAI or Gemini) to evaluate model responses based on labeled examples (pass/fail + reason). Requires `OPENAI_API_KEY` and potentially `GEMINI_API_KEY` in the `.env` file.
-*   `requirements.txt`: Lists the required Python packages.
-
-*   `data/` directory:
-    *   `personas.json` / `scenarios.json`: Contains the definitions saved by `definitions.py`.
-    *   `questions.json`: Contains the synthetic questions generated by `synthetic_data_generator.py`.
-    *   Response Files (`responses_*.json`, `model_comparison_*.json`): Contains responses generated using OpenAI/RAG and Gemini for the questions. *Note: These were manually added/copied for viewer testing.*
-    *   Evaluated Files (`llm_evaluated_*.json`, `gemini_llm_evaluated_*.json`): Contains evaluations performed by `simple_llm_judge.py`. *Note: These were manually added/copied for viewer testing.*
-
-*   `viewers/` directory:
-    *   Contains copies of HTML viewers (e.g., `compare_viewer.html`, `evaluation_comparison.html`, `manual_evaluator.html`) moved here for testing with the data in `data/`.
-
-## Workflow Demonstrated
-
-This setup demonstrates an evaluation-driven development workflow for LLM applications:
-
-1.  **Define Test Cases:** Define user personas and scenarios (`definitions.py`) representing expected usage patterns.
-2.  **Generate Synthetic Data:** Create test questions automatically based on the defined personas and scenarios (`synthetic_data_generator.py`). This allows testing before having real user data.
-3.  **Generate Initial Responses:** Run the synthetic questions through your initial LLM system (e.g., an OpenAI-based RAG system) to get baseline responses (results in files like `responses_*.json`).
-4.  **Manual Labeling:** To build ground truth for evaluation (beyond just "vibes"), manually label a subset of the responses (e.g., 20-100 examples) as "pass" or "fail" and provide a reason. The `manual_evaluator.html` viewer aids this process.
-5.  **System Iteration & Comparison:** Make changes to your system (e.g., try a different model like Gemini, adjust prompts, improve retrieval). Generate responses from the new system version for the same questions.
-6.  **Raw Comparison:** Use a viewer like `compare_viewer.html` (loading `model_comparison_*.json`, which combines responses) to directly compare the outputs of different models/system versions side-by-side.
-7.  **Automated Evaluation (LLM-as-Judge):** Use the manually labeled data to train or configure an LLM-as-judge (`simple_llm_judge.py`). This judge can then automatically evaluate large sets of responses consistently.
-8.  **Analyze Evaluations:** Use a viewer like `evaluation_comparison.html` (loading `llm_evaluated_*.json` and `gemini_llm_evaluated_*.json`) to compare the pass/fail rates and reasons assigned by the LLM judge across different models or system versions. Identify patterns (e.g., where one model struggles) to guide further improvements.
-
-This creates a flywheel: generate data -> evaluate -> identify weaknesses -> improve system -> re-evaluate.
-
-*More context to be added later.*
-
-## Lightning Lesson Steps (Draft)
-
-This section outlines the initial steps for generating synthetic data, as demonstrated for the lightning lesson.
+Follow these steps to walk through the synthetic data generation and evaluation process:
 
 1.  **Generate Personas & Scenarios:**
-    *   The `definitions.py` script contains hardcoded Python dictionaries defining user personas and scenarios relevant to the workshop topic.
-    *   Running this script saves these definitions into JSON format.
-    *   **Command:**
+    *   The `definitions.py` script contains hardcoded Python dictionaries defining relevant user personas and scenarios. Running it saves them to JSON.
+    *   **Command (run from project root):**
         ```bash
         python synthetic-data-EDD/definitions.py
         ```
     *   **Output:** Creates `synthetic-data-EDD/data/personas.json` and `synthetic-data-EDD/data/scenarios.json`.
 
 2.  **Generate Synthetic Questions:**
-    *   The `synthetic_data_generator.py` script imports the personas and scenarios from the generated JSON files.
-    *   It then iterates through each persona/scenario pair and uses the OpenAI API (requires `OPENAI_API_KEY` in the root `.env` file) to generate a specified number of relevant questions a user matching that profile might ask.
-    *   **Command:**
+    *   The `synthetic_data_generator.py` script uses the generated JSON definitions and the OpenAI API (requires `OPENAI_API_KEY` in the root `.env`) to create test questions.
+    *   **Command (run from project root):**
         ```bash
         python synthetic-data-EDD/synthetic_data_generator.py
         ```
-    *   **Output:** Creates `synthetic-data-EDD/data/questions.json` containing the generated questions, linked back to the originating persona and scenario.
+    *   **Output:** Creates `synthetic-data-EDD/data/questions.json`.
 
-3.  **Manual Labeling (Ground Truth):**
-    *   Ideally, you would run the generated `questions.json` through your initial model/system (MVP) to get responses. (For this demo, example responses might already exist in files like `data/responses_*.json`).
-    *   Before automating evaluation, it's crucial to manually review and label a subset of these responses (e.g., 20-50 examples) as "pass" or "fail", providing a reason. This creates the essential ground truth dataset.
-    *   The `manual_evaluator.html` viewer helps streamline this process. It loads a response file (e.g., `data/responses_20250328_190348.json`) and allows you to assign judgments and reasons, saving the results to a new file (e.g., `data/evaluated_responses_...json`).
-    *   **Action:** Open the viewer (server must be running in `synthetic-data-EDD/`):
+3.  **Manual Labeling (Simulated):**
+    *   **Concept:** In a real workflow, you'd run the generated `questions.json` through your model to get responses (example files like `data/responses_*.json` might already exist here for demo purposes). You would then manually label a subset (e.g., 20-50) as "pass" or "fail" with reasons to create ground truth.
+    *   **Tool:** The `manual_evaluator.html` viewer helps with this labeling. It loads a response file and saves your judgments.
+    *   **Action (Demo):** Open the viewer in your browser (requires the HTTP server from Setup Step 3 to be running):
         ```bash
         # In browser: http://localhost:8000/viewers/manual_evaluator.html
-        # Or via command line:
+        # Or via command line (macOS):
         open http://localhost:8000/viewers/manual_evaluator.html
         ```
-    *   *(In a real scenario, you would spend time using this viewer to label data).*
+    *   *(In a real scenario, you would use this viewer to label your actual model outputs).*
 
-4.  **Side-by-Side Comparison:**
-    *   Once you have responses from different models (e.g., your original OpenAI-based system vs. a new Gemini-based version) or different iterations of the same system, you need to compare them directly.
-    *   The `compare_viewer.html` is used for this. It typically loads a combined file (e.g., `data/model_comparison_*.json`) containing the question and responses from multiple sources side-by-side.
-    *   This allows for qualitative analysis of the differences in output quality, style, and accuracy between the systems being compared.
-    *   **Action:** Open the viewer (server must be running):
+4.  **Side-by-Side Comparison (Simulated):**
+    *   **Concept:** When comparing different models or system versions, you need to see their responses side-by-side for the same questions.
+    *   **Tool:** The `compare_viewer.html` loads a combined file (e.g., `data/model_comparison_*.json`) showing responses from multiple sources.
+    *   **Action (Demo):** Open the viewer (requires HTTP server):
         ```bash
         # In browser: http://localhost:8000/viewers/compare_viewer.html
-        # Or via command line:
+        # Or via command line (macOS):
         open http://localhost:8000/viewers/compare_viewer.html
         ```
-    *   *(In a real scenario, you would examine the differences displayed in this viewer).*
+    *   *(In a real scenario, you would examine the qualitative differences displayed here).*
 
 5.  **Automated Evaluation (LLM-as-Judge):**
-    *   Manual labeling provides ground truth but isn't scalable for large datasets or frequent testing.
-    *   The `simple_llm_judge.py` script automates evaluation. It uses your hand-labeled data (`--examples-file`) as few-shot examples to guide a powerful LLM (e.g., GPT-4o) in judging new responses (`--input-file`).
-    *   The script prompts the LLM judge to assign a "pass"/"fail" judgment and a reason for each response, mimicking the criteria implicitly learned from your examples.
-    *   **Command (Example evaluating Gemini responses using hand labels):**
+    *   **Concept:** Use the manually labeled examples (`--examples-file`) as few-shot prompts to guide a powerful LLM (like GPT-4o) in evaluating a larger set of responses (`--input-file`) automatically via `simple_llm_judge.py`.
+    *   **Command (Example - run from project root):**
         ```bash
+        # Ensure file paths exist or use your actual file names
+        # Add --limit 2 for a quick test during the lesson:
         python synthetic-data-EDD/simple_llm_judge.py \
             --input-file synthetic-data-EDD/data/responses_gemini_20250328_224605.json \
             --examples-file synthetic-data-EDD/data/evaluated_responses_20250328_190348.json \
-            --output-prefix synthetic-data-EDD/data/gemini_llm_evaluated
+            --output-prefix synthetic-data-EDD/data/gemini_llm_evaluated \
+            --limit 2
         ```
-    *   **Output:** The script prints progress to the terminal and saves the results (original data + judgment + reason) to timestamped and `_all.json` files (e.g., `gemini_llm_evaluated_*.json`) in the data directory.
+    *   **Output:** The script saves evaluated results (including pass/fail judgment and reason from the LLM judge) to timestamped and `_all.json` files (e.g., `gemini_llm_evaluated_*.json`) in the data directory. If using `--limit`, fewer results will be generated.
 
 6.  **Analyze Automated Evaluations:**
-    *   The final step is to analyze the results from the LLM-as-judge runs.
-    *   The `evaluation_comparison.html` viewer is used for this. It **currently loads two hardcoded evaluation files by default**: `data/llm_evaluated_20250328_220744.json` (assumed OpenAI evals) and `data/gemini_llm_evaluated_20250328_231950.json` (assumed Gemini evals).
-    *   *(Note: To compare different files, the HTML source code would need modification, or a file picker could be added.)*
-    *   This viewer compares the pass/fail judgments and reasons assigned by the LLM judge for each question across these two files. This allows you to quantitatively assess performance differences (e.g., pass rate of OpenAI vs. Gemini) and identify patterns in why responses failed according to the automated judge.
-    *   **Action:** Open the viewer (server must be running):
+    *   **Concept:** Compare the automated evaluation results across different models or versions.
+    *   **Tool:** The `evaluation_comparison.html` viewer loads evaluation files and compares the judgments and reasons side-by-side.
+    *   **Action (Demo):** Open the viewer (requires HTTP server). **Note:** This viewer currently loads two specific, hardcoded evaluation files by default (see comments in the HTML source). You may need to modify the HTML to view different files.
         ```bash
         # In browser: http://localhost:8000/viewers/evaluation_comparison.html
-        # Or via command line:
+        # Or via command line (macOS):
         open http://localhost:8000/viewers/evaluation_comparison.html
         ```
-    *   *(This completes the basic evaluation loop: define -> generate questions -> get responses -> manually label -> automatically evaluate -> analyze results).*
+    *   *(This completes the demo loop, showing how to quantitatively assess performance differences).*
 
-*(Next steps: Generate baseline responses, perform manual evaluation, run LLM-as-judge, compare results...)* 
+## Reference: Directory Contents
+
+*   **Scripts (`.py`):**
+    *   `definitions.py`: Defines hardcoded user personas & scenarios; run to generate JSON.
+    *   `synthetic_data_generator.py`: Generates synthetic questions using OpenAI API based on definitions.
+    *   `simple_llm_judge.py`: Evaluates model responses using an LLM judge and labeled examples.
+    *   `requirements.txt`: Python package dependencies.
+*   **Data (`data/`):**
+    *   `personas.json` / `scenarios.json`: Definitions saved by `definitions.py`.
+    *   `questions.json`: Synthetic questions generated by `synthetic_data_generator.py`.
+    *   `responses_*.json` / `model_comparison_*.json`: Example model responses (often manually added/copied for demo).
+    *   `evaluated_*.json` / `llm_evaluated_*.json`: Example evaluation results (often manually added/copied for demo or generated by `simple_llm_judge.py`).
+*   **Viewers (`viewers/`):**
+    *   HTML files (`manual_evaluator.html`, `compare_viewer.html`, `evaluation_comparison.html`) for visualizing data and facilitating the workflow steps. Require an HTTP server to run.
+
+*(More context or next steps can be added here later.)* 
