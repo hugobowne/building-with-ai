@@ -47,4 +47,78 @@ This setup demonstrates an evaluation-driven development workflow for LLM applic
 
 This creates a flywheel: generate data -> evaluate -> identify weaknesses -> improve system -> re-evaluate.
 
-*More context to be added later.* 
+*More context to be added later.*
+
+## Lightning Lesson Steps (Draft)
+
+This section outlines the initial steps for generating synthetic data, as demonstrated for the lightning lesson.
+
+1.  **Generate Personas & Scenarios:**
+    *   The `definitions.py` script contains hardcoded Python dictionaries defining user personas and scenarios relevant to the workshop topic.
+    *   Running this script saves these definitions into JSON format.
+    *   **Command:**
+        ```bash
+        python synthetic-data-EDD/definitions.py
+        ```
+    *   **Output:** Creates `synthetic-data-EDD/data/personas.json` and `synthetic-data-EDD/data/scenarios.json`.
+
+2.  **Generate Synthetic Questions:**
+    *   The `synthetic_data_generator.py` script imports the personas and scenarios from the generated JSON files.
+    *   It then iterates through each persona/scenario pair and uses the OpenAI API (requires `OPENAI_API_KEY` in the root `.env` file) to generate a specified number of relevant questions a user matching that profile might ask.
+    *   **Command:**
+        ```bash
+        python synthetic-data-EDD/synthetic_data_generator.py
+        ```
+    *   **Output:** Creates `synthetic-data-EDD/data/questions.json` containing the generated questions, linked back to the originating persona and scenario.
+
+3.  **Manual Labeling (Ground Truth):**
+    *   Ideally, you would run the generated `questions.json` through your initial model/system (MVP) to get responses. (For this demo, example responses might already exist in files like `data/responses_*.json`).
+    *   Before automating evaluation, it's crucial to manually review and label a subset of these responses (e.g., 20-50 examples) as "pass" or "fail", providing a reason. This creates the essential ground truth dataset.
+    *   The `manual_evaluator.html` viewer helps streamline this process. It loads a response file (e.g., `data/responses_20250328_190348.json`) and allows you to assign judgments and reasons, saving the results to a new file (e.g., `data/evaluated_responses_...json`).
+    *   **Action:** Open the viewer (server must be running in `synthetic-data-EDD/`):
+        ```bash
+        # In browser: http://localhost:8000/viewers/manual_evaluator.html
+        # Or via command line:
+        open http://localhost:8000/viewers/manual_evaluator.html
+        ```
+    *   *(In a real scenario, you would spend time using this viewer to label data).*
+
+4.  **Side-by-Side Comparison:**
+    *   Once you have responses from different models (e.g., your original OpenAI-based system vs. a new Gemini-based version) or different iterations of the same system, you need to compare them directly.
+    *   The `compare_viewer.html` is used for this. It typically loads a combined file (e.g., `data/model_comparison_*.json`) containing the question and responses from multiple sources side-by-side.
+    *   This allows for qualitative analysis of the differences in output quality, style, and accuracy between the systems being compared.
+    *   **Action:** Open the viewer (server must be running):
+        ```bash
+        # In browser: http://localhost:8000/viewers/compare_viewer.html
+        # Or via command line:
+        open http://localhost:8000/viewers/compare_viewer.html
+        ```
+    *   *(In a real scenario, you would examine the differences displayed in this viewer).*
+
+5.  **Automated Evaluation (LLM-as-Judge):**
+    *   Manual labeling provides ground truth but isn't scalable for large datasets or frequent testing.
+    *   The `simple_llm_judge.py` script automates evaluation. It uses your hand-labeled data (`--examples-file`) as few-shot examples to guide a powerful LLM (e.g., GPT-4o) in judging new responses (`--input-file`).
+    *   The script prompts the LLM judge to assign a "pass"/"fail" judgment and a reason for each response, mimicking the criteria implicitly learned from your examples.
+    *   **Command (Example evaluating Gemini responses using hand labels):**
+        ```bash
+        python synthetic-data-EDD/simple_llm_judge.py \
+            --input-file synthetic-data-EDD/data/responses_gemini_20250328_224605.json \
+            --examples-file synthetic-data-EDD/data/evaluated_responses_20250328_190348.json \
+            --output-prefix synthetic-data-EDD/data/gemini_llm_evaluated
+        ```
+    *   **Output:** The script prints progress to the terminal and saves the results (original data + judgment + reason) to timestamped and `_all.json` files (e.g., `gemini_llm_evaluated_*.json`) in the data directory.
+
+6.  **Analyze Automated Evaluations:**
+    *   The final step is to analyze the results from the LLM-as-judge runs.
+    *   The `evaluation_comparison.html` viewer is used for this. It **currently loads two hardcoded evaluation files by default**: `data/llm_evaluated_20250328_220744.json` (assumed OpenAI evals) and `data/gemini_llm_evaluated_20250328_231950.json` (assumed Gemini evals).
+    *   *(Note: To compare different files, the HTML source code would need modification, or a file picker could be added.)*
+    *   This viewer compares the pass/fail judgments and reasons assigned by the LLM judge for each question across these two files. This allows you to quantitatively assess performance differences (e.g., pass rate of OpenAI vs. Gemini) and identify patterns in why responses failed according to the automated judge.
+    *   **Action:** Open the viewer (server must be running):
+        ```bash
+        # In browser: http://localhost:8000/viewers/evaluation_comparison.html
+        # Or via command line:
+        open http://localhost:8000/viewers/evaluation_comparison.html
+        ```
+    *   *(This completes the basic evaluation loop: define -> generate questions -> get responses -> manually label -> automatically evaluate -> analyze results).*
+
+*(Next steps: Generate baseline responses, perform manual evaluation, run LLM-as-judge, compare results...)* 

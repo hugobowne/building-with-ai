@@ -11,8 +11,8 @@ NUM_QUESTIONS_PER_COMBO = 2 # How many questions per pair
 BASE_PATH = os.path.dirname(__file__) # Directory of this script (scratch)
 OUTPUT_DATA_PATH = os.path.join(BASE_PATH, 'data') # Subdirectory for output
 
-# --- Load .env file (specifically from versions/v5/.env) ---
-dotenv_path = os.path.join(BASE_PATH, os.path.pardir, os.path.pardir, '.env')
+# --- Load .env file (should be in project root, one level up) ---
+dotenv_path = os.path.join(BASE_PATH, os.path.pardir, '.env') # Go up ONE directory
 if os.path.exists(dotenv_path):
     print(f"Loading environment variables from: {dotenv_path}")
     load_dotenv(dotenv_path=dotenv_path)
