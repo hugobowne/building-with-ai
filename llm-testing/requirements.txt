@@ -1,0 +1,7 @@
+openai
+pandas
+dash
+dash-table
+pytest
+ipytest
+pytest-harvest 
