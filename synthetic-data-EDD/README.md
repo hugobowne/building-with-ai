@@ -1,12 +1,27 @@
-# Scratch Area for Synthetic Data Generation & Evaluation
+# Synthetic Data Generation & Evaluation
 
 This directory contains scripts and data used for experimenting with synthetic data generation and evaluation viewer setup, mirroring parts of the main `eval` directory.
+
+## Setup
+
+1.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+2.  **Configure API Keys:**
+    *   Create a file named `.env` in the main project root directory (the parent directory of `synthetic-data-EDD/`).
+    *   Add your OpenAI API key to the `.env` file like this:
+        ```
+        OPENAI_API_KEY='your_api_key_here'
+        ```
+    *   *(Optional)* If you intend to use Gemini via the `simple_llm_judge.py` script or adapt other scripts, you might also need to add `GEMINI_API_KEY='your_gemini_key_here'`.
 
 ## Contents
 
 *   `definitions.py`: Defines the user personas and scenarios as Python dictionaries (hardcoded based on original `../data/*.json` files). Can be run directly to save these definitions to `data/personas.json` and `data/scenarios.json`.
-*   `synthetic_data_generator.py`: Imports definitions from `definitions.py`, uses the OpenAI API to generate synthetic questions based on these, and saves the output to `data/questions.json`.
-*   `simple_llm_judge.py`: (Copied from `../`) Script that uses an LLM (like OpenAI or Gemini) to evaluate model responses based on labeled examples (pass/fail + reason).
+*   `synthetic_data_generator.py`: Imports definitions from `definitions.py`, uses the OpenAI API to generate synthetic questions based on these, and saves the output to `data/questions.json`. Requires `OPENAI_API_KEY` in the `.env` file.
+*   `simple_llm_judge.py`: (Copied from `../`) Script that uses an LLM (like OpenAI or Gemini) to evaluate model responses based on labeled examples (pass/fail + reason). Requires `OPENAI_API_KEY` and potentially `GEMINI_API_KEY` in the `.env` file.
+*   `requirements.txt`: Lists the required Python packages.
 
 *   `data/` directory:
     *   `personas.json` / `scenarios.json`: Contains the definitions saved by `definitions.py`.
@@ -15,7 +30,7 @@ This directory contains scripts and data used for experimenting with synthetic d
     *   Evaluated Files (`llm_evaluated_*.json`, `gemini_llm_evaluated_*.json`): Contains evaluations performed by `simple_llm_judge.py`. *Note: These were manually added/copied for viewer testing.*
 
 *   `viewers/` directory:
-    *   Contains copies of HTML viewers (e.g., `compare_viewer.html`, `evaluation_comparison.html`, `manual_evaluator.html`) moved here for testing with the data in `scratch/data/`.
+    *   Contains copies of HTML viewers (e.g., `compare_viewer.html`, `evaluation_comparison.html`, `manual_evaluator.html`) moved here for testing with the data in `data/`.
 
 ## Workflow Demonstrated
 
