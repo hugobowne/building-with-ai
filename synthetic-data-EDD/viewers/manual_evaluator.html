@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Response Evaluator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .metadata {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .metadata span {
+            background-color: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .response {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        .sources {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .evaluation {
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .flex {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .control-panel {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            z-index: 100;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .hidden {
+            display: none;
+        }
+        #filters {
+            margin-bottom: 15px;
+        }
+        .chunk {
+            margin-bottom: 10px;
+            border-left: 3px solid #ccc;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h1>RAG Response Evaluator</h1>
+        <div class="flex">
+            <div>
+                <input type="file" id="jsonFileInput" accept=".json">
+                <button id="loadBtn">Load File</button>
+            </div>
+            <div>
+                <button id="saveBtn">Save Evaluations</button>
+            </div>
+        </div>
+        <div id="filters">
+            <label>
+                <input type="checkbox" id="showPassed" checked> Show Passed
+            </label>
+            <label>
+                <input type="checkbox" id="showFailed" checked> Show Failed
+            </label>
+            <label>
+                <input type="checkbox" id="showUnevaluated" checked> Show Unevaluated
+            </label>
+        </div>
+    </div>
+
+    <div id="responsesContainer">
+        <p>No responses loaded. Please select a JSON file to begin.</p>
+    </div>
+
+    <script>
+        let responses = [];
+        let currentFile = '';
+
+        document.getElementById('loadBtn').addEventListener('click', () => {
+            const fileInput = document.getElementById('jsonFileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                currentFile = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        responses = JSON.parse(e.target.result);
+                        renderResponses();
+                    } catch (error) {
+                        alert('Error parsing JSON file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please select a file first.');
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            if (responses.length === 0) {
+                alert('No data to save.');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(responses, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'evaluated_' + currentFile);
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('showPassed').addEventListener('change', filterResponses);
+        document.getElementById('showFailed').addEventListener('change', filterResponses);
+        document.getElementById('showUnevaluated').addEventListener('change', filterResponses);
+
+        function renderResponses() {
+            const container = document.getElementById('responsesContainer');
+            container.innerHTML = '';
+
+            if (responses.length === 0) {
+                container.innerHTML = '<p>No responses loaded. Please select a JSON file to begin.</p>';
+                return;
+            }
+
+            responses.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                
+                // Determine card status class
+                if (item.judgment === 'pass') {
+                    card.classList.add('pass');
+                } else if (item.judgment === 'fail') {
+                    card.classList.add('fail');
+                }
+
+                let responseText = '';
+                if (typeof item.response === 'string') {
+                    responseText = item.response;
+                } else if (Array.isArray(item.response) && item.response.length > 0) {
+                    responseText = item.response[0];
+                }
+
+                let sourcesText = '';
+                if (Array.isArray(item.response) && item.response.length > 1) {
+                    sourcesText = item.response[1];
+                }
+
+                card.innerHTML = `
+                    <div class="question">Q${index + 1}: ${item.question}</div>
+                    <div class="metadata">
+                        <span>ID: ${item.id || 'N/A'}</span>
+                        <span>User Type: ${item.user_type || 'N/A'}</span>
+                        <span>Scenario: ${item.scenario || 'N/A'}</span>
+                        <span>Response Time: ${item.duration_ms || 'N/A'}ms</span>
+                    </div>
+                    <div class="response">${responseText}</div>
+                    <details>
+                        <summary>View Sources</summary>
+                        <div class="sources">${sourcesText}</div>
+                    </details>
+                    <div class="evaluation">
+                        <div class="flex">
+                            <label>
+                                <input type="radio" name="judgment-${index}" value="pass" 
+                                    ${item.judgment === 'pass' ? 'checked' : ''}>
+                                Pass
+                            </label>
+                            <label>
+                                <input type="radio" name="judgment-${index}" value="fail" 
+                                    ${item.judgment === 'fail' ? 'checked' : ''}>
+                                Fail
+                            </label>
+                            <label>
+                                <input type="radio" name="judgment-${index}" value="" 
+                                    ${!item.judgment ? 'checked' : ''}>
+                                Not Evaluated
+                            </label>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label for="reason-${index}">Reason:</label>
+                            <textarea id="reason-${index}" rows="3">${item.reason || ''}</textarea>
+                        </div>
+                        <button class="save-evaluation" data-index="${index}">Save Evaluation</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Add event listeners to evaluation buttons
+            document.querySelectorAll('.save-evaluation').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const judgmentRadios = document.getElementsByName(`judgment-${index}`);
+                    let judgment = '';
+                    
+                    for (const radio of judgmentRadios) {
+                        if (radio.checked) {
+                            judgment = radio.value;
+                            break;
+                        }
+                    }
+                    
+                    const reason = document.getElementById(`reason-${index}`).value;
+                    
+                    responses[index].judgment = judgment;
+                    responses[index].reason = reason;
+                    
+                    const card = this.closest('.card');
+                    card.classList.remove('pass', 'fail');
+                    
+                    if (judgment === 'pass') {
+                        card.classList.add('pass');
+                    } else if (judgment === 'fail') {
+                        card.classList.add('fail');
+                    }
+                    
+                    alert(`Evaluation saved for question ${index + 1}`);
+                    filterResponses();
+                });
+            });
+
+            filterResponses();
+        }
+
+        function filterResponses() {
+            const showPassed = document.getElementById('showPassed').checked;
+            const showFailed = document.getElementById('showFailed').checked;
+            const showUnevaluated = document.getElementById('showUnevaluated').checked;
+            
+            document.querySelectorAll('.card').forEach(card => {
+                const index = parseInt(card.dataset.index);
+                const item = responses[index];
+                
+                if (item.judgment === 'pass' && !showPassed) {
+                    card.classList.add('hidden');
+                } else if (item.judgment === 'fail' && !showFailed) {
+                    card.classList.add('hidden');
+                } else if (!item.judgment && !showUnevaluated) {
+                    card.classList.add('hidden');
+                } else {
+                    card.classList.remove('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

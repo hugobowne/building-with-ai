@@ -1,0 +1,35 @@
+{
+  "student": {
+    "id": "student",
+    "name": "Student",
+    "description": "A student taking a course on LLM applications who is new to AI/ML and has basic programming knowledge but limited experience with LLMs and generative AI.",
+    "goals": [
+      "Understand fundamental concepts of LLM-powered applications",
+      "Learn how to build simple apps with LLMs (RAG, agents, etc.)",
+      "Complete course assignments and projects"
+    ],
+    "technical_level": "beginner"
+  },
+  "data_scientist": {
+    "id": "data_scientist",
+    "name": "Data Scientist",
+    "description": "A data scientist with strong analytical skills and intermediate ML knowledge who wants to incorporate LLMs into their data analysis workflows and projects.",
+    "goals": [
+      "Implement LLM-powered solutions for data analysis",
+      "Optimize prompting strategies and evaluation methods",
+      "Combine traditional ML with generative AI approaches"
+    ],
+    "technical_level": "intermediate"
+  },
+  "ml_engineer": {
+    "id": "ml_engineer",
+    "name": "ML Engineer",
+    "description": "An ML engineer with strong programming skills and production experience who is building LLM-based systems for deployment in real applications.",
+    "goals": [
+      "Build robust, production-ready LLM applications",
+      "Optimize system performance, costs, and latency",
+      "Implement monitoring, evaluation, and deployment pipelines"
+    ],
+    "technical_level": "advanced"
+  }
+}

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison Viewer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff3e7f;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .card-question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+        
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .model-card {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .openai-card {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .gemini-card {
+            background-color: rgba(230, 126, 34, 0.1);
+        }
+        
+        .model-title {
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .response-text {
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        
+        .sources {
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .metadata {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .user-type {
+            font-size: 0.9rem;
+            color: #ccc;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>OpenAI vs Gemini: Response Comparison</h1>
+    
+    <div class="controls">
+        <select id="userTypeFilter" onchange="applyFilters()">
+            <option value="all">All User Types</option>
+            <option value="student">Student</option>
+            <option value="ml_engineer">ML Engineer</option>
+            <option value="data_scientist">Data Scientist</option>
+        </select>
+        
+        <select id="scenarioFilter" onchange="applyFilters()" style="margin-left: 15px;">
+            <option value="all">All Scenarios</option>
+            <option value="general">General</option>
+            <option value="factual">Factual</option>
+            <option value="technical">Technical</option>
+        </select>
+    </div>
+    
+    <div id="container"></div>
+    
+    <script>
+        // Data file path
+        const dataFilePath = '../data/model_comparison_20250328_230931.json';
+        
+        // Format user type for display
+        function formatUserType(type) {
+            if (!type) return '';
+            return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+        
+        // Format scenario for display
+        function formatScenario(scenario) {
+            if (!scenario) return '';
+            return scenario.charAt(0).toUpperCase() + scenario.slice(1);
+        }
+        
+        // Load the comparison data
+        async function loadData() {
+            try {
+                const response = await fetch(dataFilePath);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error loading data:', error);
+                return [];
+            }
+        }
+        
+        // Create cards for each comparison
+        function createCards(data, filters) {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+            
+            // Filter data based on user selections
+            const filteredData = data.filter(item => {
+                if (filters.userType !== 'all' && item.user_type !== filters.userType) {
+                    return false;
+                }
+                if (filters.scenario !== 'all' && item.scenario !== filters.scenario) {
+                    return false;
+                }
+                return true;
+            });
+            
+            // Create a card for each comparison
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Card header
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'card-header';
+                
+                const cardTitle = document.createElement('h2');
+                cardTitle.className = 'card-title';
+                cardTitle.textContent = `Question ${item.id}`;
+                
+                const userType = document.createElement('span');
+                userType.className = 'user-type';
+                userType.textContent = `${formatUserType(item.user_type)} | ${formatScenario(item.scenario)}`;
+                
+                cardHeader.appendChild(cardTitle);
+                cardHeader.appendChild(userType);
+                
+                // Card question
+                const cardQuestion = document.createElement('div');
+                cardQuestion.className = 'card-question';
+                cardQuestion.textContent = item.question;
+                
+                // Comparison container
+                const comparisonContainer = document.createElement('div');
+                comparisonContainer.className = 'comparison-container';
+                
+                // OpenAI response
+                const openaiCard = document.createElement('div');
+                openaiCard.className = 'model-card openai-card';
+                
+                const openaiTitle = document.createElement('h3');
+                openaiTitle.className = 'model-title';
+                openaiTitle.textContent = 'OpenAI Response';
+                
+                const openaiResponse = document.createElement('div');
+                openaiResponse.className = 'response-text';
+                
+                if (Array.isArray(item.openai_response) && item.openai_response[0]) {
+                    openaiResponse.textContent = item.openai_response[0];
+                    
+                    // Add sources if available
+                    if (item.openai_response[1]) {
+                        const sourcesPara = document.createElement('div');
+                        sourcesPara.className = 'sources';
+                        sourcesPara.textContent = item.openai_response[1];
+                        openaiResponse.appendChild(sourcesPara);
+                    }
+                } else {
+                    openaiResponse.textContent = "No response available.";
+                }
+                
+                const openaiMetadata = document.createElement('div');
+                openaiMetadata.className = 'metadata';
+                openaiMetadata.textContent = `Time: ${Math.round(item.openai_duration_ms || 0)}ms | Tokens: ${item.openai_tokens || 0}`;
+                
+                openaiCard.appendChild(openaiTitle);
+                openaiCard.appendChild(openaiResponse);
+                openaiCard.appendChild(openaiMetadata);
+                
+                // Gemini response
+                const geminiCard = document.createElement('div');
+                geminiCard.className = 'model-card gemini-card';
+                
+                const geminiTitle = document.createElement('h3');
+                geminiTitle.className = 'model-title';
+                geminiTitle.textContent = 'Gemini Response';
+                
+                const geminiResponse = document.createElement('div');
+                geminiResponse.className = 'response-text';
+                
+                if (Array.isArray(item.gemini_response) && item.gemini_response[0]) {
+                    geminiResponse.textContent = item.gemini_response[0];
+                    
+                    // Add sources if available
+                    if (item.gemini_response[1]) {
+                        const sourcesPara = document.createElement('div');
+                        sourcesPara.className = 'sources';
+                        sourcesPara.textContent = item.gemini_response[1];
+                        geminiResponse.appendChild(sourcesPara);
+                    }
+                } else {
+                    geminiResponse.textContent = "No response available.";
+                }
+                
+                const geminiMetadata = document.createElement('div');
+                geminiMetadata.className = 'metadata';
+                geminiMetadata.textContent = `Time: ${Math.round(item.gemini_duration_ms || 0)}ms | Tokens: ${item.gemini_tokens || 0}`;
+                
+                geminiCard.appendChild(geminiTitle);
+                geminiCard.appendChild(geminiResponse);
+                geminiCard.appendChild(geminiMetadata);
+                
+                // Add the model cards to the comparison container
+                comparisonContainer.appendChild(openaiCard);
+                comparisonContainer.appendChild(geminiCard);
+                
+                // Assemble the card
+                card.appendChild(cardHeader);
+                card.appendChild(cardQuestion);
+                card.appendChild(comparisonContainer);
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // Apply filters selected by the user
+        function applyFilters() {
+            const userTypeFilter = document.getElementById('userTypeFilter').value;
+            const scenarioFilter = document.getElementById('scenarioFilter').value;
+            
+            const filters = {
+                userType: userTypeFilter,
+                scenario: scenarioFilter
+            };
+            
+            loadData().then(data => createCards(data, filters));
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            applyFilters();
+        });
+    </script>
+</body>
+</html> 

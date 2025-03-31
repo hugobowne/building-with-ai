@@ -1,0 +1,18 @@
+{
+  "cohort_student": {
+    "description": "A student in the second cohort trying to evaluate their own implementations and understand what makes a good response.",
+    "context": "Attended workshops on LLM apps, RAG, prompt engineering."
+  },
+  "general": {
+    "description": "Questions about fundamental concepts, terminology, and principles of LLM-powered applications.",
+    "context": "Seeking to understand core concepts from workshops."
+  },
+  "technical": {
+    "description": "Technical questions about implementing specific components or techniques.",
+    "context": "Working on building/improving a technical aspect."
+  },
+  "factual": {
+    "description": "Factual questions about specific content presented in the workshops.",
+    "context": "Trying to recall/clarify specific workshop info."
+  }
+}

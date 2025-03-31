@@ -1,0 +1,146 @@
+[
+  {
+    "id": "synth_student_cohort_student_1",
+    "question": "What are the key factors to consider when evaluating the performance of my LLM application, and how can I measure its effectiveness in generating accurate responses?",
+    "user_type": "student",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_student_cohort_student_2",
+    "question": "Can you explain how prompt engineering works and provide some examples of how different prompts can lead to varying results in LLM outputs?",
+    "user_type": "student",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_student_general_1",
+    "question": "What are the key differences between traditional machine learning models and large language models, and why are these differences important when building applications?",
+    "user_type": "student",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_student_general_2",
+    "question": "Can you explain what RAG (Retrieval-Augmented Generation) is and how it improves the performance of LLM applications?",
+    "user_type": "student",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_student_technical_1",
+    "question": "What are some best practices for implementing prompt engineering in LLM applications to ensure consistent and reliable outputs?",
+    "user_type": "student",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_student_technical_2",
+    "question": "How can I effectively use synthetic data in my projects, and what are the key considerations for evaluating its quality and applicability?",
+    "user_type": "student",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_student_factual_1",
+    "question": "What are the key differences between retrieval-augmented generation (RAG) and traditional LLM approaches when building applications?",
+    "user_type": "student",
+    "scenario": "factual"
+  },
+  {
+    "id": "synth_student_factual_2",
+    "question": "Can you explain how to effectively evaluate the performance of an LLM application in real-world scenarios?",
+    "user_type": "student",
+    "scenario": "factual"
+  },
+  {
+    "id": "synth_data_scientist_cohort_student_1",
+    "question": "What are the best practices for evaluating the effectiveness of LLM responses in my data analysis projects, particularly when using tools like LlamaIndex?",
+    "user_type": "data_scientist",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_data_scientist_cohort_student_2",
+    "question": "How can I effectively incorporate synthetic data in my LLM applications to enhance reliability and ensure better performance in real-world scenarios?",
+    "user_type": "data_scientist",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_data_scientist_general_1",
+    "question": "What are the key differences between retrieval-augmented generation (RAG) and traditional LLM applications, and how can I determine which approach is best for my data analysis projects?",
+    "user_type": "data_scientist",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_data_scientist_general_2",
+    "question": "Can you explain the importance of prompt engineering in building reliable LLM applications and share some best practices for optimizing prompts based on the type of data I\u2019m working with?",
+    "user_type": "data_scientist",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_data_scientist_technical_1",
+    "question": "What are the best practices for implementing RAG in my existing data analysis workflows to ensure the reliability of LLM outputs?",
+    "user_type": "data_scientist",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_data_scientist_technical_2",
+    "question": "Can you explain how to effectively evaluate the performance of LLM applications using metrics that are relevant to my data science projects?",
+    "user_type": "data_scientist",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_data_scientist_factual_1",
+    "question": "What are the best practices for integrating LLMs into existing data analysis workflows, particularly in terms of synthetic data generation and evaluation?",
+    "user_type": "data_scientist",
+    "scenario": "factual"
+  },
+  {
+    "id": "synth_data_scientist_factual_2",
+    "question": "Can you explain how prompt engineering can improve the performance of LLMs in specific data analysis tasks, and what tools or frameworks you recommend for this process?",
+    "user_type": "data_scientist",
+    "scenario": "factual"
+  },
+  {
+    "id": "synth_ml_engineer_cohort_student_1",
+    "question": "How can I effectively evaluate the performance of my LLM-based application to ensure it meets production standards?",
+    "user_type": "ml_engineer",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_ml_engineer_cohort_student_2",
+    "question": "What are some best practices for prompt engineering that can help improve the quality of responses in my implementation?",
+    "user_type": "ml_engineer",
+    "scenario": "cohort_student"
+  },
+  {
+    "id": "synth_ml_engineer_general_1",
+    "question": "Can you explain the differences between retrieval-augmented generation (RAG) and traditional generative models in the context of building reliable LLM applications?",
+    "user_type": "ml_engineer",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_ml_engineer_general_2",
+    "question": "What are the best practices for evaluating the performance of LLM applications, particularly when it comes to synthetic data and real-world scenarios?",
+    "user_type": "ml_engineer",
+    "scenario": "general"
+  },
+  {
+    "id": "synth_ml_engineer_technical_1",
+    "question": "What best practices should I follow for implementing retrieval-augmented generation (RAG) in my LLM applications to ensure high reliability and performance?",
+    "user_type": "ml_engineer",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_ml_engineer_technical_2",
+    "question": "How can I effectively evaluate the effectiveness of synthetic data in training my LLM models, and what metrics should I prioritize for performance assessment?",
+    "user_type": "ml_engineer",
+    "scenario": "technical"
+  },
+  {
+    "id": "synth_ml_engineer_factual_1",
+    "question": "What are the best practices for evaluating the performance of LLM applications in production environments, and how can we effectively quantify their reliability?",
+    "user_type": "ml_engineer",
+    "scenario": "factual"
+  },
+  {
+    "id": "synth_ml_engineer_factual_2",
+    "question": "Can you provide examples of how to implement prompt engineering techniques using LlamaIndex to improve user interactions in our LLM-based systems?",
+    "user_type": "ml_engineer",
+    "scenario": "factual"
+  }
+]
