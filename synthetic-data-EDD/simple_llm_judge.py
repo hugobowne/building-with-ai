@@ -187,7 +187,10 @@ def main():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     # Use the prefix from args for output files
     output_dir = os.path.dirname(args.input_file) # Save output in the same dir as input by default
-    timestamped_filename = f"{args.output_prefix}_{timestamp}.json"
+    # --- Make prefix robust: strip potential directory path --- 
+    base_prefix = os.path.basename(args.output_prefix)
+    # --- Use base_prefix for filenames --- 
+    timestamped_filename = f"{base_prefix}_{timestamp}.json"
     output_filename = os.path.join(output_dir, timestamped_filename)
     
     with open(output_filename, 'w') as f:
@@ -196,7 +199,8 @@ def main():
     print(f"\nEvaluation complete! Results saved to {output_filename}")
     
     # Also save to the _all file expected by the viewer
-    all_output_filename = os.path.join(output_dir, f"{args.output_prefix}_all.json")
+    # --- Use base_prefix here too --- 
+    all_output_filename = os.path.join(output_dir, f"{base_prefix}_all.json")
     with open(all_output_filename, 'w') as f:
         json.dump(results, f, indent=2)
     
