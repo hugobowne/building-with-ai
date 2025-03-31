@@ -1,0 +1,342 @@
+[
+  {
+    "question": "What are the first principles for building LLM applications mentioned in Workshop 1?",
+    "response": [
+      "Based on the workshop transcript sections provided, I cannot find any mention of \"Workshop 1\" or the \"first principles for building LLM applications\".",
+      "No source information available."
+    ],
+    "duration_ms": 5196.999073028564,
+    "timestamp": "2025-03-28T22:44:39.426128",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 31,
+    "id": "q1",
+    "user_type": "student",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "Who were the instructors for the first workshop?",
+    "response": [
+      "Based on the workshop transcript sections provided, I cannot find the names of the instructors for the first workshop.",
+      "No source information available."
+    ],
+    "duration_ms": 5513.684988021851,
+    "timestamp": "2025-03-28T22:44:45.444543",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 21,
+    "id": "q2",
+    "user_type": "student",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What is the software development lifecycle for LLM applications?",
+    "response": [
+      "Based on the workshop transcript sections provided, I cannot find a description of the specific software development lifecycle (SDLC) for LLM applications. The sections mention various aspects like development, evaluation, deployment, and monitoring, but don't outline a distinct lifecycle process.",
+      "No source information available."
+    ],
+    "duration_ms": 5295.803070068359,
+    "timestamp": "2025-03-28T22:44:51.245455",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 52,
+    "id": "q3",
+    "user_type": "ml_engineer",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What frameworks or tools were demonstrated in the first workshop?",
+    "response": [
+      "Based on the workshop transcript sections provided, I cannot answer your question. The provided sections do not contain any information about a first workshop or any frameworks or tools demonstrated in it.",
+      "No source information available."
+    ],
+    "duration_ms": 8030.380964279175,
+    "timestamp": "2025-03-28T22:44:59.779846",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 35,
+    "id": "q4",
+    "user_type": "data_scientist",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How can I approach prompt engineering according to Workshop 1?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 57\n}\n]",
+      ""
+    ],
+    "duration_ms": 1874.3550777435303,
+    "timestamp": "2025-03-28T22:45:02.156079",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q5",
+    "user_type": "student",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What are the stages of building an LLM application discussed in the workshop?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 55\n}\n]",
+      ""
+    ],
+    "duration_ms": 1587.834119796753,
+    "timestamp": "2025-03-28T22:45:04.246761",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q6",
+    "user_type": "ml_engineer",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What did Hugo say about evaluation and iteration in LLM applications?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 52\n}\n]",
+      ""
+    ],
+    "duration_ms": 3014.0528678894043,
+    "timestamp": "2025-03-28T22:45:07.766301",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q7",
+    "user_type": "data_scientist",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What is the difference between LLM fine-tuning and prompt engineering according to the workshop?",
+    "response": [
+      "Based on the provided workshop transcript sections:\n\nThe transcript describes prompt engineering as an iterative process of crafting the input (the prompt) given to the LLM, often including instructions, context, and examples to guide the model's output.\n\nIt describes fine-tuning as a process that actually adapts or modifies the underlying LLM itself, requiring a dataset of examples and being a more involved, potentially costly, and time-consuming process compared to prompt engineering.\n\nWhile the transcript describes both techniques and suggests starting with prompt engineering before considering fine-tuning, it doesn't explicitly state a direct comparison defining the \"difference\" between the two in a single statement. It explains what each process entails separately.",
+      "No source information available."
+    ],
+    "duration_ms": 8074.711084365845,
+    "timestamp": "2025-03-28T22:45:16.345583",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 136,
+    "id": "q8",
+    "user_type": "student",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How should I think about data when building LLM applications?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 42\n}\n]",
+      ""
+    ],
+    "duration_ms": 950.3133296966553,
+    "timestamp": "2025-03-28T22:45:17.796214",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q9",
+    "user_type": "data_scientist",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What were the main topics covered in the first workshop?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 39\n}\n]",
+      ""
+    ],
+    "duration_ms": 2473.9928245544434,
+    "timestamp": "2025-03-28T22:45:20.773728",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q10",
+    "user_type": "student",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What advice did Hugo give about integrating LLMs into existing workflows?",
+    "response": [
+      "Based on the provided transcript sections, Hugo gave the following advice regarding integrating LLMs into existing workflows:\n\n*   **Start small:** Begin with pilot projects rather than large-scale implementations.\n*   **Focus on specific tasks:** Target well-defined tasks where LLMs can provide clear value.\n*   **Involve stakeholders:** Engage relevant parties early and throughout the process.\n*   **Set clear goals:** Define what you want to achieve with the integration.\n*   **Provide user training:** Ensure users know how to work with the new LLM-powered tools.\n*   **Monitor performance:** Continuously track how the integration is performing.\n*   **Use iterative development:** Build and refine the integration step-by-step.\n*   **Establish feedback loops:** Create mechanisms for users to provide feedback.\n*   **Prioritize security:** Address security considerations from the outset.\n*   **Consider technical aspects:** Think about APIs, potential fine-tuning, and infrastructure requirements.\n*   **Be aware of challenges:** Acknowledge potential issues like data privacy, cost, and reliability.",
+      "No source information available."
+    ],
+    "duration_ms": 8139.145135879517,
+    "timestamp": "2025-03-28T22:45:29.417995",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 214,
+    "id": "q11",
+    "user_type": "ml_engineer",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How does observability play a role in LLM application development?",
+    "response": [
+      "Based on the provided transcript sections:\n\nObservability plays a role in LLM application development by helping developers understand what's happening inside the application. It is used to debug issues, track performance (including latency and token usage), and gain insights into user interactions by tracking elements like prompts, responses, and potential errors.",
+      "No source information available."
+    ],
+    "duration_ms": 6245.722770690918,
+    "timestamp": "2025-03-28T22:45:36.167394",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 62,
+    "id": "q12",
+    "user_type": "data_scientist",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What are the key considerations for production deployment of LLM applications?",
+    "response": [
+      "Based on the workshop transcript sections provided, I cannot find the answer to what the key considerations are for production deployment of LLM applications. The provided sections are empty.",
+      "No source information available."
+    ],
+    "duration_ms": 4556.237697601318,
+    "timestamp": "2025-03-28T22:45:41.226842",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 33,
+    "id": "q13",
+    "user_type": "ml_engineer",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How should I handle errors and edge cases in LLM applications?",
+    "response": [
+      "Based on the provided workshop transcript sections, there is no information on how to handle errors and edge cases in LLM applications.",
+      "No source information available."
+    ],
+    "duration_ms": 8538.301944732666,
+    "timestamp": "2025-03-28T22:45:50.266529",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 25,
+    "id": "q14",
+    "user_type": "student",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What did the workshop say about the importance of looking at your data?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 6\n}\n]",
+      ""
+    ],
+    "duration_ms": 2506.011962890625,
+    "timestamp": "2025-03-28T22:45:53.278213",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q15",
+    "user_type": "data_scientist",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How can I measure the success of my LLM application?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 4\n}\n]",
+      ""
+    ],
+    "duration_ms": 1807.4769973754883,
+    "timestamp": "2025-03-28T22:45:55.590894",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q16",
+    "user_type": "ml_engineer",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What was discussed about API parameters and their effects on LLM outputs?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 2\n}\n]",
+      ""
+    ],
+    "duration_ms": 1142.1051025390625,
+    "timestamp": "2025-03-28T22:45:57.237927",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q17",
+    "user_type": "student",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What ethical considerations should I keep in mind when building LLM applications?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 59\n}\n]",
+      ""
+    ],
+    "duration_ms": 2613.3482456207275,
+    "timestamp": "2025-03-28T22:46:00.356433",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q18",
+    "user_type": "data_scientist",
+    "scenario": "general",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "How did the first workshop address the challenge of hallucinations in LLMs?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 57\n}\n]",
+      ""
+    ],
+    "duration_ms": 1574.126958847046,
+    "timestamp": "2025-03-28T22:46:02.440098",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q19",
+    "user_type": "ml_engineer",
+    "scenario": "technical",
+    "judgment": "",
+    "reason": ""
+  },
+  {
+    "question": "What examples or case studies were presented in the first workshop?",
+    "response": [
+      "Sorry, an error occurred with Gemini: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {\n}\n, links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, retry_delay {\n  seconds: 54\n}\n]",
+      ""
+    ],
+    "duration_ms": 2106.9366931915283,
+    "timestamp": "2025-03-28T22:46:05.048555",
+    "model_provider": "gemini",
+    "context_tokens": 0,
+    "completion_tokens": 0,
+    "id": "q20",
+    "user_type": "student",
+    "scenario": "factual",
+    "judgment": "",
+    "reason": ""
+  }
+]

@@ -1,0 +1,10 @@
+# Environment variables
+.env
+
+# Synthetic Data EDD specific ignores
+synthetic-data-EDD/data/*_llm_evaluated_*.json
+synthetic-data-EDD/data/*_all.json
+
+# Python caches
+**/__pycache__/
+*.pyc 
