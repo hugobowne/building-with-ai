@@ -1,4 +1,9 @@
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+print(f"API Key loaded: {'Yes' if os.getenv('OPENAI_API_KEY') else 'No'}")
 
 documents = SimpleDirectoryReader("data").load_data()
 index = VectorStoreIndex.from_documents(documents)
