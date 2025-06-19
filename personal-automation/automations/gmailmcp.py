@@ -1,6 +1,7 @@
 from fastmcp import FastMCP
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 import functools
 import os
 import json
@@ -12,6 +13,11 @@ from automations.gmail_types import GmailThreadHeader, GmailThread
 
 mcp = FastMCP('Gmail')
 
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.modify',
+    'https://www.googleapis.com/auth/gmail.compose',
+    'https://www.googleapis.com/auth/gmail.readonly',
+]
 
 def get_oauth_info() -> dict:
     oauth_file = os.path.join(os.environ["HOME"], '.gmail-mcp/gcp-oauth.keys.json')
@@ -30,6 +36,28 @@ def get_creds() -> Credentials:
         **cred_info, **oauth_info['installed']
     }
     return Credentials.from_authorized_user_info(info)
+
+@mcp.tool()
+async def login():
+    oauth_file = os.path.join(os.environ["HOME"], '.gmail-mcp/gcp-oauth.keys.json')
+    
+    flow = InstalledAppFlow.from_client_secrets_file(oauth_file, SCOPES)
+    creds = flow.run_local_server(port=0)
+    
+    cred_info = {
+        'token': creds.token,
+        'refresh_token': creds.refresh_token,
+        'token_uri': creds.token_uri,
+        'client_id': creds.client_id,
+        'client_secret': creds.client_secret,
+        'scopes': creds.scopes
+    }
+    
+    cred_file = os.path.join(os.environ["HOME"], '.gmail-mcp/credentials.json')
+    with open(cred_file, 'w') as f:
+        json.dump(cred_info, f)
+    
+    return "Login successful - credentials saved"
 
 @functools.lru_cache(maxsize=1)
 def get_gmail_service():
