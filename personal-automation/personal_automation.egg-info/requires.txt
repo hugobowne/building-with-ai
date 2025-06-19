@@ -1,7 +1,0 @@
-fastmcp>=2.8.1
-google-api-python-client>=2.172.0
-humanlayer>=0.7.9
-lilypad-sdk[anthropic,openai]>=0.8.1
-mirascope[anthropic,openai,tenacity]>=1.25.1
-pydantic[email]>=2.11.7
-python-dotenv>=1.1.0
