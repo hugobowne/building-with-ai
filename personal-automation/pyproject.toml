@@ -13,3 +13,6 @@ dependencies = [
     "pydantic[email]>=2.11.7",
     "python-dotenv>=1.1.0",
 ]
+
+[tool.uv]
+package = true

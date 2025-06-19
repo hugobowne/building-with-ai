@@ -1,3 +1,17 @@
+Metadata-Version: 2.4
+Name: personal-automation
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastmcp>=2.8.1
+Requires-Dist: google-api-python-client>=2.172.0
+Requires-Dist: humanlayer>=0.7.9
+Requires-Dist: lilypad-sdk[anthropic,openai]>=0.8.1
+Requires-Dist: mirascope[anthropic,openai,tenacity]>=1.25.1
+Requires-Dist: pydantic[email]>=2.11.7
+Requires-Dist: python-dotenv>=1.1.0
+
 # Personal Automation
 
 This subdirectory contains code from the lightning talk [10x Your Productivity by Building Personal Agents with MCP](https://maven.com/p/05b8f8/10x-your-productivity-by-building-personal-agents-with-mcp).
@@ -58,7 +72,7 @@ Great! You have the basic examples working. Follow the pre-requisite setup steps
 ## Example Usage
 
 - [ ] Migrate gmail workflow
-- [x] Migrate linkedin analytics workflow
+- [ ] Migrate linkedin analytics workflow
 - [ ] Create encapsulated "week review" tool
 
 ## Important Files

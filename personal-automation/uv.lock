@@ -1088,7 +1088,7 @@ wheels = [
 [[package]]
 name = "personal-automation"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },
     { name = "google-api-python-client" },
