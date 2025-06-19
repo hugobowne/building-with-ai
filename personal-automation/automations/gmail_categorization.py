@@ -119,14 +119,15 @@ def categorize_gmail_emails(
 - you should write from the perspective of what the sender ultimately wants to achieve; lead with their problems
 - use simple, 6th grade level language
 - vary the rhythm of sentences to keep the reader engaged
+- never copy the content of the email thread, you should write a new email
 </instructions>
 
-USER: Please write a draft response to the following email:
+USER: Please write a draft response to the following email thread:
 
 <thread>
-{thread}
+{thread_content}
 </thread>
 
 Remember your instructions.
 """)
-async def draft_reply(content: str): ...
+async def draft_reply(thread_content: str): ...

@@ -31,7 +31,12 @@ async def summarize_linkedin_analytics() -> LinkedInAnalytics:
 
 @mcp.tool()
 async def weekly_review():
-    pass
+    async with Client(SERVER_URL) as client:
+        tool_client = ToolClient(client)
+        # Note: we have max_emails=5 for purposes of a live demo!
+        await tool_client.gmail_process_inbox(max_emails=5)
+        res = await tool_client.summarize_linkedin_analytics()
+        return res
 
 
 async def list_tools():

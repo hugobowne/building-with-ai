@@ -6,8 +6,8 @@ import os
 import json
 import base64
 from email.message import EmailMessage
-from automations.gmail_categorization import categorize_gmail_emails
-from automations.gmail_types import GmailThreadHeader
+from automations.gmail_categorization import categorize_gmail_emails, draft_reply
+from automations.gmail_types import GmailThreadHeader, GmailThread
 
 
 mcp = FastMCP('Gmail')
@@ -45,11 +45,57 @@ async def get_inbox_threads() -> list[GmailThreadHeader]:
     return [GmailThreadHeader(**thread) for thread in results.get('threads', [])]
 
 
+def _extract_text_from_payload(payload):
+    """Extract plain text content from Gmail message payload."""
+    if payload.get('body', {}).get('data'):
+        return base64.urlsafe_b64decode(payload['body']['data']).decode('utf-8')
+    
+    if payload.get('parts'):
+        for part in payload['parts']:
+            if part.get('mimeType') == 'text/plain' and part.get('body', {}).get('data'):
+                return base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
+            elif part.get('parts'):
+                text = _extract_text_from_payload(part)
+                if text:
+                    return text
+    
+    return ""
+
+def _get_header_value(headers, name):
+    """Get header value by name from Gmail message headers."""
+    for header in headers:
+        if header['name'].lower() == name.lower():
+            return header['value']
+    return ""
+
+def _map_thread_to_gmail_thread(thread_data) -> GmailThread:
+    """Map Gmail API thread response to GmailThread model."""
+    messages = thread_data.get('messages', [])
+    if not messages:
+        raise ValueError("Thread has no messages")
+    
+    # Get the last message for reply information
+    last_message = messages[-1]
+    headers = last_message.get('payload', {}).get('headers', [])
+    
+    # Extract reply information from the last message
+    reply_email = _get_header_value(headers, 'From')
+    reply_subject = _get_header_value(headers, 'Subject')
+    reply_content = _extract_text_from_payload(last_message.get('payload', {}))
+    
+    return GmailThread(
+        id=thread_data['id'],
+        snippet=thread_data.get('snippet', ''),
+        reply_email=reply_email,
+        reply_subject=reply_subject,
+        reply_content=reply_content
+    )
+
 @mcp.tool()
-async def read_thread(threadId: str):
+async def read_thread(threadId: str) -> GmailThread:
     service = get_gmail_service()
     results = service.users().threads().get(userId='me', id=threadId, format='full').execute()
-    return results
+    return _map_thread_to_gmail_thread(results)
 
 
 @mcp.tool()
@@ -80,14 +126,18 @@ async def write_draft_reply(threadId: str, to_email: str, subject: str, content:
         
 
 @mcp.tool()
-async def process_inbox():
-    threads = await get_inbox_threads()
-    clf_response = await categorize_gmail_emails(threads)
+async def process_inbox(max_emails: int | None = None):
+    # Note: the `.fn` is due to how the @mcp.tool() decorator works.
+    threads = await get_inbox_threads.fn()
+    max_emails = max_emails or len(threads)
+    clf_response = categorize_gmail_emails(threads[:max_emails])
     for email, classification in zip(clf_response.emails, clf_response.classifications):
         if classification.classification == "draft_reply":
             print(f"Drafting reply for thread {email.id}: {email.snippet}")
-            await write_draft_reply(email.id, email.to_email, email.subject, email.content)
+            thread = await read_thread.fn(email.id)
+            reply = await draft_reply(thread.reply_content)
+            await write_draft_reply.fn(email.id, thread.reply_email, thread.reply_subject, reply.content)
         elif classification.classification == "archive":
             print(f"Archiving thread {email.id}: {email.snippet}")
-            await archive_thead(email.id)
+            await archive_thead.fn(email.id)
     return True

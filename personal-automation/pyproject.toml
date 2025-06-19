@@ -16,3 +16,8 @@ dependencies = [
 
 [tool.uv]
 package = true
+
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+]

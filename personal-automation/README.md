@@ -57,9 +57,14 @@ Great! You have the basic examples working. Follow the pre-requisite setup steps
 
 ## Example Usage
 
-- [ ] Migrate gmail workflow
-- [x] Migrate linkedin analytics workflow
-- [ ] Create encapsulated "week review" tool
+```bash
+# run the server
+uv run uvicorn automations.mymcp:sse_app --port 8082 --reload
+
+# Trigger the weekly review
+uv run automations/mymcp.py weekly_review
+```
+
 
 ## Important Files
 

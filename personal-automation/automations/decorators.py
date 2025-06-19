@@ -9,6 +9,8 @@ This module provides decorators that can be composed with existing Mirascope dec
 import functools
 from functools import reduce, wraps
 from typing import Any, Callable, Optional, TypeVar, TypeAlias
+from humanlayer import HumanLayer, FunctionCallSpec, FunctionCallStatus, FunctionCall
+import time
 
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
 
@@ -37,7 +39,6 @@ def batch(
         reduce_fn = lambda a, b: a + b # noqa: E731
     
     def decorator(func: Callable[[list[T]], R]) -> Callable[[list[T]], R]:
-        @wraps(func)
         def wrapper(items: list[T], *args, **kwargs) -> R:
             if len(items) <= batch_size:
                 return func(items, *args, **kwargs)
@@ -79,30 +80,19 @@ def hitl_validation(
         render_fn = lambda x: x # noqa: E731
 
     def decorator(func: Callable[..., R]) -> Callable[..., R]:
-        @wraps(func)
         def wrapper(*args, **kwargs) -> R:
-            print(f"hitl_validation wrapper called for {func.__name__}")
-            hl = hl_instance or _get_default_humanlayer()
-            @hl.require_approval()
-            def approve_fn(*, x: R) -> R:
-                return x
-
             for i in range(max_steps):
                 print(f"Attempt {i+1} of {max_steps} for human approval of {func.__name__}")
                 # Get classifications from the wrapped function
                 result = func(*args, **kwargs)
-                
-                # Request human approval (sync version)
-                approved_result = approve_fn(x=render_fn(result))
+                print(f"Getting approval for {func.__name__}")
+                approval = _get_approval_status(func.__name__, x=render_fn(result), hl_instance=hl_instance)
+                if approval.approved:
+                    return result
 
-                import ipdb; ipdb.set_trace()
-                
-                if not _is_reject(approved_result):
-                    return approved_result
-                
                 # If rejected, add feedback for next iteration
                 kwargs['prev_result'] = result
-                kwargs['feedback'] = approved_result
+                kwargs['feedback'] = approval.comment
                     
             raise ValueError(f"Failed to get human approval after {max_steps} attempts")
         
@@ -128,7 +118,6 @@ def self_consistency(
             return "classification"
     """
     def decorator(func: Callable[..., R]) -> Callable[..., R]:
-        @wraps(func)
         def wrapper(*args, **kwargs) -> R:
             print(f"Running {func.__name__} {k} times for self-consistency")
             results = []
@@ -142,19 +131,24 @@ def self_consistency(
     return decorator
 
 
-def _is_reject(response: Any) -> bool:
-    """Check if a human response indicates rejection."""
-    return isinstance(response, str) and response.startswith('User denied')
+def _get_approval_status(name: str, *, hl_instance: HumanLayer | None = None, **kwargs) -> FunctionCallStatus:
+    hl = hl_instance or _get_default_humanlayer()
+    call: FunctionCall = hl.create_function_call(
+        spec=FunctionCallSpec(
+            fn=name,
+            kwargs=kwargs,
+        ),
+    )
+    # loop until the call is approved
+    while (not call.status) or (call.status.approved is None):
+        print(f"Waiting for approval of {name}, id: {call.call_id}")
+        time.sleep(5)
+        call = hl.get_function_call(call_id=call.call_id)
+    
+    return call.status
 
 
 @functools.lru_cache(maxsize=1)
 def _get_default_humanlayer():
     """Get default HumanLayer instance."""
-    try:
-        from humanlayer import HumanLayer
-        return HumanLayer(verbose=True)
-    except ImportError:
-        raise ImportError(
-            "HumanLayer is required for hitl_validation decorator. "
-            "Install with: pip install humanlayer"
-        )
+    return HumanLayer(verbose=True)
