@@ -1,0 +1,5 @@
+.env
+
+*.egg-info
+.venv
+.ruff_cache

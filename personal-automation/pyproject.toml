@@ -1,0 +1,24 @@
+[project]
+name = "personal-automation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=2.8.1",
+    "google-api-python-client>=2.172.0",
+    "google-auth-oauthlib>=1.2.2",
+    "humanlayer>=0.7.9",
+    "lilypad-sdk[anthropic,openai]>=0.8.1",
+    "mirascope[anthropic,openai,tenacity]>=1.25.1",
+    "pydantic[email]>=2.11.7",
+    "python-dotenv>=1.1.0",
+]
+
+[tool.uv]
+package = true
+
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+]
