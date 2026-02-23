@@ -25,6 +25,7 @@ This is a small subset of what’s possible. It’s also the reason Claude Cowor
 
 Agents are just LLMs with tools in a conversation loop and once you know the pattern, you’ll be able to build all types of agents with it:
 
+![Agentic loop diagram](search-agent/img/builders-playbook-infographic.jpeg)
 
 To show you the pattern, I'll build two agents from scratch: our **“general-purpose” coding agent** and a **search agent**.
 
