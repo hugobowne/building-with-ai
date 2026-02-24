@@ -1,6 +1,9 @@
 # Environment variables
 .env
 
+# macOS
+.DS_Store
+
 # Synthetic Data EDD specific ignores
 synthetic-data-EDD/data/*_llm_evaluated_*.json
 synthetic-data-EDD/data/*_all.json
