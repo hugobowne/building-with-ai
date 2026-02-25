@@ -2,7 +2,7 @@
 
 A minimal search agent built with Gemini and Exa in 61 lines of Python. This agent searches the web to answer questions with current information.
 
-See the full blog post: [How To Build a General Purpose AI Agent in 250 lines of Python](../post-v2.md)
+Companion code for the blog post: [How To Build a General Purpose AI Agent in 131 Lines of Python](https://hugobowne.substack.com/p/how-to-build-a-general-purpose-ai)
 
 ## Setup
 
