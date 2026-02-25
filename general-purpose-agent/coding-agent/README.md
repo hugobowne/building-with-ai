@@ -2,7 +2,7 @@
 
 A minimal coding agent built with Claude in 131 lines of Python. This agent can read, write, edit files, and execute shell commands.
 
-See the full blog post: [How To Build a General Purpose AI Agent in 250 lines of Python](../post-v2.md)
+Companion code for the blog post: [How To Build a General Purpose AI Agent in 131 Lines of Python](https://hugobowne.substack.com/p/how-to-build-a-general-purpose-ai)
 
 ## Setup
 
